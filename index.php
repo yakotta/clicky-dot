@@ -10,8 +10,9 @@
         <span id="points"></span>
         <span id="lives"></span>
     </div>
+    
+    <div id="dead" class="hidden">you died, loser :(</div>
     <div id="game-container" class="col-8"></div>
-    <div id="test"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="script.js"></script>

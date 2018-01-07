@@ -1,129 +1,94 @@
 $(document).ready(function(){
-    // https://krazydad.com/tutorials/makecolors.php
-    function RGB2Color(r,g,b)
-    {
-      return 'rgb(' + Math.round(r) + ',' + Math.round(g) + ',' + Math.round(b) + ')';
+    // stores the life and point information
+    var UI = {
+        lives: 2,
+        points: 0,
+        update: function(deltaLives, deltaPoints){
+            UI.lives += deltaLives;
+            UI.points += deltaPoints;
+            $('#lives').text('lives: ' + (UI.lives + 1));
+            $('#points').text('points: ' + UI.points);
+        }
     }
-
-    var frequency = .4;
-    var htmlElements = '';
-    for (i = 0; i < 16; i++) {
+    
+    // displays initial lives and points at the start of the game
+    UI.update(0,0)
+    
+    // defines generic game parameters for later use
+    var deltaLives = 0;
+    var deltaPoints = 0;
+    var numDots = 16;
+    var gameCon = $('#game-container');
+    
+    // generates random colors for the dots
+    function randomColors(i){
+        // https://krazydad.com/tutorials/makecolors.php
+        var frequency = .4;
+        
         var red   = Math.sin(frequency*i + 2) * 55 + 200;
         var green = Math.sin(frequency*i + 4) * 55 + 200;
         var blue  = Math.sin(frequency*i + 0) * 127 + 200;
         
-        htmlElements += '<div style="background-color:' + RGB2Color(red,green,blue) + '" id="dot-' + i + '" class="dot hidden" ></div>';
+        return 'rgb(' + Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue) + ')';
     };
+  
+    // creates dots with click handlers and adds them to the game container
+    for (i = 0; i < numDots; i++) {
+        var dot = $('<div>');
+        dot.attr('style', 'background-color: ' + randomColors(i));
+        dot.attr('id', "dot-" + i);
+        dot.addClass("dot hidden");
+        dot.on('click', clickDot);
 
-    $('#game-container').html(htmlElements);
-
-    var dotArray = [];
-    for (i = 0; i < 16; i++) {
-        dotArray[i] = $('#dot-' + i);
+        gameCon.append(dot);
     };
-
-    var points = 0;
-    $('#points').text('points: ' + points);
-    var lives = 3;
-    $('#lives').text('lives: ' + lives);
-
-    console.log(points);
-
-    setInterval(function(){
-        var randomDot = Math.floor(Math.random() * (dotArray.length));
-        console.log(randomDot);
-        dotArray[randomDot].removeClass('hidden');
-    }, 2000);
     
-    // when a colored dot is clicked, it turns white and you get a point
-    // when a white dot is clicked, you lose a life (3 lives max)
+    // reveals a random dot
+    function revealDot() {
+        var selectDot = Math.floor(Math.random() * numDots);
+        $("#dot-" + selectDot).removeClass("hidden");
+    };
+    
+    // when revealed dot is a clicked, player keeps a life and gets a point
+    function clickDot(){
+        if ($(this).hasClass("hidden") == false) {
+            deltaLives = 0;
+            deltaPoints = 1;
+        }
+    };
+    
+    // reveals death div and ends game
+    function killPlayer() {
+        clearInterval(gameInterval);
+        $('#dead').removeClass("hidden");
+    };
+
+    // sets up the game timing
+    var gameInterval = setInterval(function(){
+        // hides all dots to start with
+        $(".dot").addClass("hidden");
+        
+        // determines if player is dead
+        if(UI.lives < 1) {
+           killPlayer();
+           return false;
+        }
+        
+        //reveals a dot after 500ms and prepares for player failure
+        setTimeout(function(){
+            revealDot();
+            deltaLives = -1;
+            deltaPoints = 0;
+            
+            // updates lives and points
+            setTimeout(function(){UI.update(deltaLives, deltaPoints)}, 2000);
+        }, 500);
+    }, 2500);
+    
+    // when a colored dot is clicked, it gets hidden and you get a point
+    // when anything but a colored dot is cliked, you lose a life (3 lives max)
     // when a colored dot is NOT clicked, you lose a life
     // display a points counter
     // the time given to click each dot should get progressively shorter
-    
-
-    /* From the whatsapp convo
-    for (i = 0; i < 4; i++) {  
-        var dot = $("<div></div>");
-        dot.addClass("dot red");
-        $('#test').appendChild(dot);
-      }
-
-      // old 
-        for (i = 0; i < 4; i++) {  
-            htmlElements += '<div id="dot-' + i + '" class="dot hidden" ></div>';
-        };
-        $('#game-container').html(htmlElements);
-
-    // new
-        for (i = 0; i < 4; i++) {  
-            var dot = $("<div>");
-            dot.setAttribute("id","dot-"+1);
-            dot.addClass("dot hidden");
-            $('#game-container').appendChild(dot);
-        }
-
-      // current
-        setInterval(function(){
-            var randomDot = Math.floor(Math.random() * (dotArray.length));
-            console.log(randomDot);
-            dotArray[randomDot].removeClass('hidden');
-        }, 2000);
-
-        // final
-            var gc = $("game-container");
-            var selected = Math.floor(Math.random() * (dotArray.length))
-            gc.children(".dot").addClass("hidden");
-            gc.children(".dot#dot-"+selected).removeClass("hidden")
-
-        // what is this
-            $("something").appendChild("<div>");
-            $(something).data("index",x);
-
-        // oh wait, I think the clickTimeout is not needed
-        var clickTimeout = null;
-        var clickActive = false;
-        var points = 10;
-        var loopPoints = 0;
-        
-        $("game-container").children(".dot").on("click",function(){
-            if(clickActive == true){
-              loopPoints = 1;
-            }
-        });
-        
-        setInterval(function(){
-          // ... do the mole visibility stuff
-          // now you are allowed to click!!
-          clickActive = true;
-          // we default to, you didnt click, you lose
-          loopPoints = -1;
-          clickTimeout = setTimeout(function(){
-            // clicks are no longer valid, you lost!
-            clickActive = false;
-            // add whatever loop points
-            points += loopPoints;
-          },1000);  
-        },2000);
-
-        // add click handlers when i generate the dots, that way every dot gets a click handler?
-
-        for (i = 0; i < 4; i++) {  
-        ... make the dot html
-        $('#game-container').appendChild(dot);
-        dot.on("click",function(){
-            if(clickActive == true){
-            loopPoints = 1;
-            }
-        });
-        }
-
-        // so at the top of your game loop, you'll need something like 
-        var gameLoop = setInterval(function(){
-
-        if(userPoints === 0){
-        clearInterval(gameLoop)
-        }
-    */
     
 });
