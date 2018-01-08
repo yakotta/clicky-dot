@@ -15,16 +15,15 @@ $(document).ready(function(){
     UI.update(0,0)
     
     // defines generic game parameters for later use
-    var deltaLives = 0;
-    var deltaPoints = 0;
     var numDots = 16;
     var gameCon = $('#game-container');
+    var gameActive = false;
+    var deathTimer = false;
     
     // generates random colors for the dots
     function randomColors(i){
         // https://krazydad.com/tutorials/makecolors.php
         var frequency = .4;
-        
         var red   = Math.sin(frequency*i + 2) * 55 + 200;
         var green = Math.sin(frequency*i + 4) * 55 + 200;
         var blue  = Math.sin(frequency*i + 0) * 127 + 200;
@@ -38,7 +37,6 @@ $(document).ready(function(){
         dot.attr('style', 'background-color: ' + randomColors(i));
         dot.attr('id', "dot-" + i);
         dot.addClass("dot hidden");
-        dot.on('click', clickDot);
 
         gameCon.append(dot);
     };
@@ -49,46 +47,56 @@ $(document).ready(function(){
         $("#dot-" + selectDot).removeClass("hidden");
     };
     
-    // when revealed dot is a clicked, player keeps a life and gets a point
-    function clickDot(){
-        if ($(this).hasClass("hidden") == false) {
-            deltaLives = 0;
-            deltaPoints = 1;
+    // looks at clicks in the game container
+    gameCon.on('click', function(event){
+        // if the game is not active, do not process event
+        if(gameActive == false){
+            return false;
         }
-    };
-    
+        
+        // what did the player click?
+        var isDot = $(event.target).hasClass("dot");
+        var isHidden = $(event.target).hasClass("hidden");
+        
+        // determines if a click is a win or a loss
+        if(!isDot || isHidden){
+            UI.update(-1,0);
+            gameLoop();
+        } else if (isDot && !isHidden) {
+            UI.update(0,1);
+            gameLoop();
+        }
+    });
+
     // reveals death div and ends game
     function killPlayer() {
-        clearInterval(gameInterval);
         $('#dead').removeClass("hidden");
+        $('.dot').removeClass("hidden");
+        gameActive = false;
+        clearTimeout(deathTimer);
     };
-
-    // sets up the game timing
-    var gameInterval = setInterval(function(){
-        // hides all dots to start with
-        $(".dot").addClass("hidden");
-        
+    
+    function gameLoop(){
         // determines if player is dead
-        if(UI.lives < 1) {
+        if(UI.lives < 0) {
            killPlayer();
            return false;
         }
         
-        //reveals a dot after 500ms and prepares for player failure
-        setTimeout(function(){
-            revealDot();
-            deltaLives = -1;
-            deltaPoints = 0;
-            
-            // updates lives and points
-            setTimeout(function(){UI.update(deltaLives, deltaPoints)}, 2000);
-        }, 500);
-    }, 2500);
+        // resets the timer
+        clearTimeout(deathTimer);
+        gameActive = true;
+        
+        //re-hides all dots and then reveals one
+        $(".dot").addClass("hidden");
+        revealDot();
+        
+        // gives player a set time to click
+        deathTimer = setTimeout(function(){
+            UI.update(-1,0);
+            gameLoop();
+        },1500);
+    }
     
-    // when a colored dot is clicked, it gets hidden and you get a point
-    // when anything but a colored dot is cliked, you lose a life (3 lives max)
-    // when a colored dot is NOT clicked, you lose a life
-    // display a points counter
-    // the time given to click each dot should get progressively shorter
-    
+    gameLoop();
 });
