@@ -10,7 +10,7 @@
         <span id="points"></span>
         <span id="lives"></span>
     </div>
-    \
+    
     <div id="dead" class="hidden">you died, loser :(</div>
     <div id="game-container" class="col-8"></div>
 
