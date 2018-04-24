@@ -6,12 +6,17 @@
 </head>
 <body>
     <div id="words">
-        <p>smack-a-dot</p>
+        <p>clicky dot</p>
         <span id="points"></span>
         <span id="lives"></span>
+        <span id="high-score"></span>
     </div>
     
-    <div id="dead" class="hidden">you died, loser :(</div>
+    <div id="game-end" class="hidden-div">
+        <span>you died, loser :(</span>
+        <button id="try-again">try again?</button>
+    </div>
+    
     <div id="game-container" class="col-8"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

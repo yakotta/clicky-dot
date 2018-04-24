@@ -15,6 +15,10 @@
     background-color: white !important;
 }
 
+.hidden-div {
+    display: none;
+}
+
 .red {
     background-color: red;
 }

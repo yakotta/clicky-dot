@@ -3,9 +3,22 @@ $(document).ready(function(){
     var UI = {
         lives: 2,
         points: 0,
+        highScore: 0,
         update: function(deltaLives, deltaPoints){
             UI.lives += deltaLives;
             UI.points += deltaPoints;
+            $('#lives').text('lives: ' + (UI.lives + 1));
+            $('#points').text('points: ' + UI.points);
+        },
+        updateHighScore: function(score){
+            if (score > UI.highScore) {
+                UI.highScore = score;
+                $('#high-score').text('high score: ' + UI.highScore);
+            }
+        },
+        reset: function(){
+            UI.lives = 2;
+            UI.points = 0;
             $('#lives').text('lives: ' + (UI.lives + 1));
             $('#points').text('points: ' + UI.points);
         }
@@ -13,6 +26,8 @@ $(document).ready(function(){
     
     // displays initial lives and points at the start of the game
     UI.update(0,0)
+    $('#high-score').text('high score: ' + UI.highScore);
+    UI.updateHighScore(UI.highScore);
     
     // defines generic game parameters for later use
     var numDots = 16;
@@ -68,14 +83,22 @@ $(document).ready(function(){
         }
     });
 
-    // reveals death div and ends game
+    // reveals you died meassage and ends the game
     function killPlayer() {
-        $('#dead').removeClass("hidden");
+        $('#game-end').removeClass("hidden-div");
         $('.dot').removeClass("hidden");
         gameActive = false;
+        UI.updateHighScore(UI.points);
         clearTimeout(deathTimer);
     };
     
+    // allows the player to reset the game and try again
+    $('#try-again').on('click', function(){
+        UI.reset();
+        $('#game-end').addClass("hidden-div");
+        gameLoop();
+    });
+
     function gameLoop(){
         // determines if player is dead
         if(UI.lives < 0) {
