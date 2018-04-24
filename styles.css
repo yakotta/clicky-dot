@@ -1,6 +1,21 @@
+body {
+    text-align: center;
+    position: relative;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
+
+}
+
+
 #game-container {
     background-color: white;
     width: 600px;
+    display: inline-block;
+}
+
+#UI {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 125px;
 }
 
 .dot {
@@ -19,6 +34,14 @@
     display: none;
 }
 
-.red {
-    background-color: red;
+h1 {
+    font-size: 1.75em;
+}
+
+p {
+    margin: 0px;
+}
+
+button {
+    margin: 4px;
 }
