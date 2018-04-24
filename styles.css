@@ -1,8 +1,8 @@
 body {
     text-align: center;
-    position: relative;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
-    
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;    
+    font-size: 16px;
+
     /* These styles will make the body use the entire page of the browser window */
     position: absolute;
     left: 0;
@@ -13,7 +13,6 @@ body {
 }
 
 .aligner {
-    /* These styles will make the body use the entire page of the browser window */
     /* we also want the aligner to use the entire page of the browser window too */
     position: absolute;
     left: 0;
@@ -53,16 +52,17 @@ body {
     border-radius: 100%;
 }
 
-.hidden {
+.hidden-dot {
     background-color: white !important;
 }
 
 .hidden-div {
-    display: none;
+    visibility: hidden;
 }
 
 h1 {
     font-size: 1.75em;
+    font-weight: normal;
 }
 
 p,
@@ -75,6 +75,8 @@ button {
     border: none;
     text-decoration: underline;
     background: none;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 /* The radio container */

@@ -68,15 +68,15 @@ $(document).ready(function(){
 
     // reveals a random dot and hides all others
     function selectDot() {
-        $(".dot").addClass("hidden");
+        $(".dot").addClass("hidden-dot");
         var selectDot = Math.floor(Math.random() * numDots);
-        $("#dot-" + selectDot).removeClass("hidden");
+        $("#dot-" + selectDot).removeClass("hidden-dot");
     }
 
     // reveals "you died :(" meassage and ends the game
     function killPlayer() {
         $('#game-end').removeClass("hidden-div");
-        $('.dot').removeClass("hidden");
+        $('.dot').removeClass("hidden-dot");
         gameActive = false;
         updateHighScore(UI.points);
         clearTimeout(dotTimer);
@@ -124,7 +124,7 @@ $(document).ready(function(){
         var dot = $('<div>');
         dot.attr('style', 'background-color: ' + randomColors(i));
         dot.attr('id', "dot-" + i);
-        dot.addClass("dot hidden");
+        dot.addClass("dot hidden-dot");
         gameCon.prepend(dot);
     };
     
@@ -137,7 +137,7 @@ $(document).ready(function(){
         
         // what did the player click?
         var isDot = $(event.target).hasClass("dot");
-        var isHidden = $(event.target).hasClass("hidden");
+        var isHidden = $(event.target).hasClass("hidden-dot");
         
         // determines if a click is a win or a loss
         if(!isDot || isHidden){
