@@ -1,43 +1,35 @@
 $(document).ready(function(){
-    // removes flash of unstled content
+    // removes flash of unstyled content
     $('#UI').removeClass("hidden-div");
 
-    // stores the life and point information
-    var UI = {
-        lives: 2,
-        points: 0,
-        highScore: 0,
-        update: function(deltaLives, deltaPoints){
-            UI.lives += deltaLives;
-            UI.points += deltaPoints;
-            $('#lives').text('lives: ' + (UI.lives + 1));
-            $('#points').text('points: ' + UI.points);
-        },
-        updateHighScore: function(score){
-            if (score > UI.highScore) {
-                UI.highScore = score;
-                $('#high-score').text('high score: ' + UI.highScore);
-            }
-        },
-        reset: function(){
-            UI.lives = 2;
-            UI.points = 0;
-            $('#lives').text('lives: ' + (UI.lives + 1));
-            $('#points').text('points: ' + UI.points);
+    // adds a point to player's score
+    function winPoint(){
+        UI.points += 1;
+        $('#points').text('points: ' + UI.points);
+    }
+
+    // subtracts one of the player's lives
+    function loseLife(){
+        UI.lives -= 1;
+        $('#lives').text('lives: ' + (UI.lives + 1));
+    }
+
+    // keeps track of the player's current high score
+    function updateHighScore(score){
+        if (score > UI.highScore) {
+            UI.highScore = score;
+            $('#high-score').text('high score: ' + UI.highScore);
         }
     }
-    
-    // displays initial lives and points at the start of the game
-    UI.update(0,0)
-    $('#high-score').text('high score: ' + UI.highScore);
-    UI.updateHighScore(UI.highScore);
-    
-    // defines generic game parameters for later use
-    var numDots = 16;
-    var gameCon = $('#game-container');
-    var gameActive = false;
-    var deathTimer = false;
-    
+
+    // resets lives and points to zero for a new roudn
+    function resetScores(){
+        UI.lives = 2;
+        UI.points = 0;
+        $('#lives').text('lives: ' + (UI.lives + 1));
+        $('#points').text('points: ' + UI.points);
+    }
+
     // generates random colors for the dots
     function randomColors(i){
         // https://krazydad.com/tutorials/makecolors.php
@@ -48,6 +40,22 @@ $(document).ready(function(){
         
         return 'rgb(' + Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue) + ')';
     };
+
+    // defines game parameters 
+    var numDots = 16;
+    var gameCon = $('#game-container');
+    var gameActive = false;
+    var dotTimer = false;
+    var UI = {
+        lives: 2,
+        points: 0,
+        highScore: 0,
+    }
+    
+    // displays initial lives, points, and high score at the start of the game
+    resetScores();
+    $('#high-score').text('high score: ' + UI.highScore);
+    updateHighScore(UI.highScore);
   
     // creates dots with click handlers and adds them to the game container
     for (i = 0; i < numDots; i++) {
@@ -55,17 +63,17 @@ $(document).ready(function(){
         dot.attr('style', 'background-color: ' + randomColors(i));
         dot.attr('id', "dot-" + i);
         dot.addClass("dot hidden");
-
         gameCon.prepend(dot);
     };
     
-    // reveals a random dot
-    function revealDot() {
+    // reveals a random dot and hides all others
+    function selectDot() {
+        $(".dot").addClass("hidden");
         var selectDot = Math.floor(Math.random() * numDots);
         $("#dot-" + selectDot).removeClass("hidden");
     };
     
-    // looks at clicks in the game container
+    // sees if a  click is valid
     gameCon.on('click', function(event){
         // if the game is not active, do not process event
         if(gameActive == false){
@@ -78,30 +86,31 @@ $(document).ready(function(){
         
         // determines if a click is a win or a loss
         if(!isDot || isHidden){
-            UI.update(-1,0);
+            loseLife();
             gameLoop();
         } else if (isDot && !isHidden) {
-            UI.update(0,1);
+            winPoint();
             gameLoop();
         }
     });
 
-    // reveals you died meassage and ends the game
+    // reveals "you died :(" meassage and ends the game
     function killPlayer() {
         $('#game-end').removeClass("hidden-div");
         $('.dot').removeClass("hidden");
         gameActive = false;
-        UI.updateHighScore(UI.points);
-        clearTimeout(deathTimer);
+        updateHighScore(UI.points);
+        clearTimeout(dotTimer);
     };
     
     // allows the player to reset the game and try again
     $('#try-again').on('click', function(){
-        UI.reset();
+        resetScores();
         $('#game-end').addClass("hidden-div");
         gameLoop();
     });
 
+    // runs the game
     function gameLoop(){
         // determines if player is dead
         if(UI.lives < 0) {
@@ -109,19 +118,16 @@ $(document).ready(function(){
            return false;
         }
         
-        // resets the timer
-        clearTimeout(deathTimer);
+        // resets the dot timer and selects a dot
+        clearTimeout(dotTimer);
         gameActive = true;
-        
-        //re-hides all dots and then reveals one
-        $(".dot").addClass("hidden");
-        revealDot();
+        selectDot();
         
         // gives player a set time to click
-        deathTimer = setTimeout(function(){
-            UI.update(-1,0);
+        dotTimer = setTimeout(function(){
+            loseLife();
             gameLoop();
-        },1500);
+        }, 1000);
     }
     
     gameLoop();
