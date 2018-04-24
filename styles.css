@@ -18,6 +18,10 @@ body {
     padding-top: 125px;
 }
 
+.section {
+    padding-bottom: 15px;
+}
+
 .dot {
     height: 100px;
     width: 100px;
@@ -38,10 +42,38 @@ h1 {
     font-size: 1.75em;
 }
 
-p {
+p,
+label {
     margin: 0px;
 }
 
 button {
-    margin: 4px;
+    cursor: pointer;
+    border: none;
+    text-decoration: underline;
+    background: none;
+}
+
+/* The radio container */
+.radio {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #bbb;
+}
+
+/* Hide the browser's default radio button */
+.radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* When radio label is hovered or checked, turn text black */
+.radio:hover,
+.radio input:checked ~ span {
+    color: #000;
 }

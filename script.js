@@ -1,33 +1,58 @@
 $(document).ready(function(){
-    // removes flash of unstyled content
-    $('#UI').removeClass("hidden-div");
+    // updates the displayed point count
+    function displayPoints(){
+        $('#points').text(UI.points);
+    }
+
+    // updates the displayed life count
+    function displayLives(){
+        $('#lives').text(UI.lives + 1);
+    }
+
+    // updates the displayed high schore
+    function displayHighScore(){
+        $('#high-score').text(UI.highScore);
+    } 
 
     // adds a point to player's score
     function winPoint(){
         UI.points += 1;
-        $('#points').text('points: ' + UI.points);
+        displayPoints();
     }
 
     // subtracts one of the player's lives
     function loseLife(){
         UI.lives -= 1;
-        $('#lives').text('lives: ' + (UI.lives + 1));
+        displayLives();
     }
 
     // keeps track of the player's current high score
     function updateHighScore(score){
         if (score > UI.highScore) {
             UI.highScore = score;
-            $('#high-score').text('high score: ' + UI.highScore);
+            displayHighScore();
         }
     }
 
-    // resets lives and points to zero for a new roudn
+    // resets lives and zeroes points for a new roudn
     function resetScores(){
-        UI.lives = 2;
+        if(level == "normal") UI.lives = 2;
+        if(level == "death") UI.lives = 0;
         UI.points = 0;
-        $('#lives').text('lives: ' + (UI.lives + 1));
-        $('#points').text('points: ' + UI.points);
+        displayLives();
+        displayPoints();
+    }
+
+    // sets the difficuly level to noraml (3 lives)
+    function makeNormal(){
+        UI.lives = 2;
+        if(gameActive != false) displayLives();
+    }
+
+    // sets the difficulty level to sudden death (1 life)
+    function makeDeath(){
+        UI.lives = 0;
+        if(gameActive != false) displayLives();
     }
 
     // generates random colors for the dots
@@ -46,6 +71,7 @@ $(document).ready(function(){
     var gameCon = $('#game-container');
     var gameActive = false;
     var dotTimer = false;
+    var level = "normal";
     var UI = {
         lives: 2,
         points: 0,
@@ -54,7 +80,7 @@ $(document).ready(function(){
     
     // displays initial lives, points, and high score at the start of the game
     resetScores();
-    $('#high-score').text('high score: ' + UI.highScore);
+    displayHighScore();
     updateHighScore(UI.highScore);
   
     // creates dots with click handlers and adds them to the game container
@@ -109,6 +135,13 @@ $(document).ready(function(){
         $('#game-end').addClass("hidden-div");
         gameLoop();
     });
+
+    // allows user to select difficult level
+    $('#difficulty input').on('change', function() {
+        level = $('input[name=radio]:checked').val();
+        if(level == "normal") makeNormal();
+        if(level == "death") makeDeath();
+     });
 
     // runs the game
     function gameLoop(){

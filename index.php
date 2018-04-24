@@ -7,13 +7,28 @@
 <body>
     <div id="game-container" class="col-8"></div>
     
-    <div id="UI" class="hidden-div">
+    <div id="UI">
         <h1>clicky dot</h1>
-        <p><span id="points"></span></p>
-        <p><span id="lives"></span></p>
-        <p><span id="high-score"></span></p>
+        
+        <div id="numbers" class="section">
+            <p>points: <span id="points">0</span></p>
+            <p>lives: <span id="lives">3</span></p>
+            <p>high score: <span id="high-score">0</span></p>
+        </div>
+        
+        <div id="difficulty" class="section">
+            <p>difficulty</p>
+            <label id="normal" class="radio">
+                <input type="radio" id="normal-radio" name="radio" value="normal" checked/>
+                <span>normal</span>
+            </label>
+            <label id="death" class="radio">
+                <input type="radio" id="death-radio" value="death" name="radio" />
+                <span>sudden death</span>
+            </label>
+        </div>
 
-        <div id="game-end" class="hidden-div">
+        <div id="game-end" class="hidden-div section">
             <p>you died, loser :(</p>
             <button id="try-again">try again?</button>
         </div>
