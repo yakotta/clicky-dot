@@ -2,6 +2,29 @@ body {
     text-align: center;
     position: relative;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
+    
+    /* These styles will make the body use the entire page of the browser window */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.aligner {
+    /* These styles will make the body use the entire page of the browser window */
+    /* we also want the aligner to use the entire page of the browser window too */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* These styles center the game horizontally and vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -15,7 +38,7 @@ body {
 #UI {
     display: inline-block;
     vertical-align: top;
-    padding-top: 125px;
+    /* we don't need this anymore padding-top: 125px; */
 }
 
 .section {
