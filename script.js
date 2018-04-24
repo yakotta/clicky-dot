@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    // removes flash of unstled content
+    $('#UI').removeClass("hidden-div");
+
     // stores the life and point information
     var UI = {
         lives: 2,
@@ -53,7 +56,7 @@ $(document).ready(function(){
         dot.attr('id', "dot-" + i);
         dot.addClass("dot hidden");
 
-        gameCon.append(dot);
+        gameCon.prepend(dot);
     };
     
     // reveals a random dot

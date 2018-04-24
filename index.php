@@ -7,7 +7,7 @@
 <body>
     <div id="game-container" class="col-8"></div>
     
-    <div id="UI">
+    <div id="UI" class="hidden-div">
         <h1>clicky dot</h1>
         <p><span id="points"></span></p>
         <p><span id="lives"></span></p>
