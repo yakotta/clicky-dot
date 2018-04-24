@@ -1,107 +1,107 @@
-// updates the displayed point count
-function displayPoints(){
-    $('#points').text(UI.points);
-}
-
-// updates the displayed life count
-function displayLives(){
-    $('#lives').text(UI.lives + 1);
-}
-
-// updates the displayed high schore
-function displayHighScore(){
-    $('#high-score').text(UI.highScore);
-} 
-
-// adds a point to player's score
-function winPoint(){
-    UI.points += 1;
-    displayPoints();
-}
-
-// subtracts one of the player's lives
-function loseLife(){
-    UI.lives -= 1;
-    displayLives();
-}
-
-// keeps track of the player's current high score
-function updateHighScore(score){
-    if (score > UI.highScore) {
-        UI.highScore = score;
-        displayHighScore();
-    }
-}
-
-// resets lives and zeroes points for a new roudn
-function resetScores(){
-    if(level == "normal") UI.lives = 2;
-    if(level == "death") UI.lives = 0;
-    UI.points = 0;
-    displayLives();
-    displayPoints();
-}
-
-// sets the difficuly level to noraml (3 lives)
-function makeNormal(){
-    UI.lives = 2;
-    if(gameActive != false) displayLives();
-}
-
-// sets the difficulty level to sudden death (1 life)
-function makeDeath(){
-    UI.lives = 0;
-    if(gameActive != false) displayLives();
-}
-
-// generates random colors for the dots
-function randomColors(i){
-    // https://krazydad.com/tutorials/makecolors.php
-    var frequency = .4;
-    var red   = Math.sin(frequency*i + 2) * 55 + 200;
-    var green = Math.sin(frequency*i + 4) * 55 + 200;
-    var blue  = Math.sin(frequency*i + 0) * 127 + 200;
-    
-    return 'rgb(' + Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue) + ')';
-};
-
-// reveals a random dot and hides all others
-function selectDot() {
-    $(".dot").addClass("hidden");
-    var selectDot = Math.floor(Math.random() * numDots);
-    $("#dot-" + selectDot).removeClass("hidden");
-};
-
-// reveals "you died :(" meassage and ends the game
-function killPlayer() {
-    $('#game-end').removeClass("hidden-div");
-    $('.dot').removeClass("hidden");
-    gameActive = false;
-    updateHighScore(UI.points);
-    clearTimeout(dotTimer);
-};
-
-// runs the game
-function gameLoop(){
-    // determines if player is dead
-    if(UI.lives < 0) {
-       killPlayer();
-       return false;
-    }
-    
-    // resets the dot timer and selects a dot
-    clearTimeout(dotTimer);
-    gameActive = true;
-    selectDot();
-    
-    // gives player a set time to click
-    dotTimer = setTimeout(function(){
-        loseLife();
-        gameLoop();
-    }, 1000);
-}
-
 $(document).ready(function(){
+    // updates the displayed point count
+    function displayPoints(){
+        $('#points').text(UI.points);
+    }
+
+    // updates the displayed life count
+    function displayLives(){
+        $('#lives').text(UI.lives + 1);
+    }
+
+    // updates the displayed high schore
+    function displayHighScore(){
+        $('#high-score').text(UI.highScore);
+    }
+
+    // adds a point to player's score
+    function winPoint(){
+        UI.points += 1;
+        displayPoints();
+    }
+
+    // subtracts one of the player's lives
+    function loseLife(){
+        UI.lives -= 1;
+        displayLives();
+    }
+
+    // keeps track of the player's current high score
+    function updateHighScore(score){
+        if (score > UI.highScore) {
+            UI.highScore = score;
+            displayHighScore();
+        }
+    }
+
+    // resets lives and zeroes points for a new roudn
+    function resetScores(){
+        if(level == "normal") UI.lives = 2;
+        if(level == "death") UI.lives = 0;
+        UI.points = 0;
+        displayLives();
+        displayPoints();
+    }
+
+    // sets the difficuly level to noraml (3 lives)
+    function makeNormal(){
+        UI.lives = 2;
+        if(gameActive != false) displayLives();
+    }
+
+    // sets the difficulty level to sudden death (1 life)
+    function makeDeath(){
+        UI.lives = 0;
+        if(gameActive != false) displayLives();
+    }
+
+    // generates random colors for the dots
+    function randomColors(i){
+        // https://krazydad.com/tutorials/makecolors.php
+        var frequency = .4;
+        var red   = Math.sin(frequency*i + 2) * 55 + 200;
+        var green = Math.sin(frequency*i + 4) * 55 + 200;
+        var blue  = Math.sin(frequency*i + 0) * 127 + 200;
+        
+        return 'rgb(' + Math.round(red) + ',' + Math.round(green) + ',' + Math.round(blue) + ')';
+    }
+
+    // reveals a random dot and hides all others
+    function selectDot() {
+        $(".dot").addClass("hidden");
+        var selectDot = Math.floor(Math.random() * numDots);
+        $("#dot-" + selectDot).removeClass("hidden");
+    }
+
+    // reveals "you died :(" meassage and ends the game
+    function killPlayer() {
+        $('#game-end').removeClass("hidden-div");
+        $('.dot').removeClass("hidden");
+        gameActive = false;
+        updateHighScore(UI.points);
+        clearTimeout(dotTimer);
+    }
+
+    // runs the game
+    function gameLoop(){
+        // determines if player is dead
+        if(UI.lives < 0) {
+        killPlayer();
+        return false;
+        }
+        
+        // resets the dot timer and selects a dot
+        clearTimeout(dotTimer);
+        gameActive = true;
+        selectDot();
+        
+        // gives player a set time to click
+        dotTimer = setTimeout(function(){
+            loseLife();
+            gameLoop();
+        }, 1000);
+    }
+
     // defines game parameters 
     var numDots = 16;
     var gameCon = $('#game-container');
@@ -112,7 +112,7 @@ $(document).ready(function(){
         lives: 2,
         points: 0,
         highScore: 0,
-    }
+    };
     
     // displays initial lives, points, and high score at the start of the game
     resetScores();
