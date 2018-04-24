@@ -1,8 +1,8 @@
 body {
     text-align: center;
-    position: relative;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
-    
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;    
+    font-size: 16px;
+
     /* These styles will make the body use the entire page of the browser window */
     position: absolute;
     left: 0;
@@ -13,7 +13,6 @@ body {
 }
 
 .aligner {
-    /* These styles will make the body use the entire page of the browser window */
     /* we also want the aligner to use the entire page of the browser window too */
     position: absolute;
     left: 0;
@@ -30,15 +29,13 @@ body {
 
 #game-container {
     background-color: white;
-    width: 600px;
-    display: inline-block;
-    top: 20px;
+    width: 80%;
 }
 
 #UI {
+    width: 20%;
     display: inline-block;
     vertical-align: top;
-    /* we don't need this anymore padding-top: 125px; */
 }
 
 .section {
@@ -46,23 +43,24 @@ body {
 }
 
 .dot {
-    height: 100px;
-    width: 100px;
-    margin: 20px;
+    width: 15%;
+    margin: 3%;
+    padding-bottom: 15%;
     display: inline-block;
     border-radius: 100%;
 }
 
-.hidden {
+.hidden-dot {
     background-color: white !important;
 }
 
 .hidden-div {
-    display: none;
+    visibility: hidden;
 }
 
 h1 {
     font-size: 1.75em;
+    font-weight: normal;
 }
 
 p,
@@ -75,6 +73,8 @@ button {
     border: none;
     text-decoration: underline;
     background: none;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 /* The radio container */
@@ -100,3 +100,4 @@ button {
 .radio input:checked ~ span {
     color: #000;
 }
+
