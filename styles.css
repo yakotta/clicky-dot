@@ -7,8 +7,8 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     margin: 0;
 }
 
@@ -17,8 +17,8 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     
     /* These styles center the game horizontally and vertically */
     display: flex;
@@ -26,18 +26,16 @@ body {
     justify-content: center;
 }
 
-
 #game-container {
     background-color: white;
-    width: 600px;
-    display: inline-block;
-    top: 20px;
+    width: 80%;
+    max-width: 700px;
+    max-height: 100vh;
 }
 
 #UI {
     display: inline-block;
     vertical-align: top;
-    /* we don't need this anymore padding-top: 125px; */
 }
 
 .section {
@@ -45,9 +43,10 @@ body {
 }
 
 .dot {
-    height: 100px;
-    width: 100px;
-    margin: 20px;
+    width: 15%;
+    padding-bottom: 15%;
+    /*the padding-bottom sets the dot height, since height doesn't take % units*/
+    margin: 3%;
     display: inline-block;
     border-radius: 100%;
 }
